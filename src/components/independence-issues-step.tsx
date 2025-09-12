@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState, useMemo } from "react";
+import { useLayoutEffect, useRef, useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -42,16 +42,26 @@ export default function IndependenceIssues() {
   const motionDotRef = useRef<SVGCircleElement | null>(null);
 
   const [pointsPx, setPointsPx] = useState<{ x: number; y: number }[]>([]);
+  const [paddingX, setPaddingX] = useState(16);
 
-  // Phần logic và useLayoutEffect giữ nguyên, nó đã rất tốt và linh hoạt
-  // ... (toàn bộ code logic và useLayoutEffect không thay đổi)
+  useEffect(() => {
+    const updatePadding = () => {
+      if (window.innerWidth >= 1024) setPaddingX(80); // lg
+      else if (window.innerWidth >= 768) setPaddingX(220); // md
+      else setPaddingX(220);
+    };
+    updatePadding();
+    window.addEventListener("resize", updatePadding);
+    return () => window.removeEventListener("resize", updatePadding);
+  }, []);
+
+  // generate polyline points theo paddingX
   const svgPoints = useMemo(() => {
     const numPoints = issues.length;
     if (numPoints === 0) return "";
 
     const viewBoxWidth = 1000;
     const viewBoxHeight = 300;
-    const paddingX = 80;
 
     const stepX = (viewBoxWidth - paddingX * 2) / (numPoints - 1);
 
@@ -62,12 +72,13 @@ export default function IndependenceIssues() {
         return `${x},${y}`;
       })
       .join(" ");
-  }, []);
+  }, [paddingX]);
 
   useLayoutEffect(() => {
     if (!sectionRef.current || !lineRef.current || !svgRef.current) return;
     const svg = svgRef.current;
     const poly = lineRef.current;
+
     const computeVertexPositions = () => {
       const rect = svg.getBoundingClientRect();
       const vb = svg.viewBox.baseVal;
@@ -81,9 +92,11 @@ export default function IndependenceIssues() {
       }
       setPointsPx(px);
     };
+
     computeVertexPositions();
     const ro = new ResizeObserver(() => computeVertexPositions());
     ro.observe(svg);
+
     const ctx = gsap.context(() => {
       const line = lineRef.current!;
       const length = line.getTotalLength();
@@ -94,6 +107,7 @@ export default function IndependenceIssues() {
         ease: "linear",
         repeat: -1,
       });
+
       const dot = motionDotRef.current!;
       gsap.to(dot, {
         duration: 4,
@@ -106,6 +120,7 @@ export default function IndependenceIssues() {
           dot.setAttribute("cy", point.y.toString());
         },
       });
+
       gsap.utils.toArray<HTMLElement>(".issue-card").forEach((card) => {
         gsap.from(card, {
           opacity: 0,
@@ -120,6 +135,7 @@ export default function IndependenceIssues() {
           },
         });
       });
+
       gsap.from(".section-label", {
         opacity: 0,
         scale: 0.8,
@@ -128,6 +144,7 @@ export default function IndependenceIssues() {
         ease: "back.out(1.7)",
       });
     }, sectionRef);
+
     return () => {
       ro.disconnect();
       ctx.revert();
@@ -135,14 +152,23 @@ export default function IndependenceIssues() {
   }, [svgPoints]);
 
   return (
-   <section ref={sectionRef} className="relative h-screen flex flex-col">
-      <Image src="/images/background.png" alt="" fill className="object-cover" priority />
-      {/* THAY ĐỔI 1: Xóa px-6 ở đây */}
-      <div className="relative z-10 max-w-[1350px] mx-auto w-full flex-grow flex items-center">
-        <div className="w-full overflow-x-auto lg:overflow-x-visible h-full flex items-center">
-          {/* THAY ĐỔI 2: Thêm px-6 vào đây */}
-          <div className="relative w-full min-w-[1200px] lg:min-w-0 h-[80%] px-6">
-            <svg ref={svgRef} viewBox="0 0 1000 300" className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+    <section ref={sectionRef} className="relative h-screen flex flex-col">
+      <Image
+        src="/images/background.png"
+        alt=""
+        fill
+        className="object-cover"
+        priority
+      />
+      <div className="relative z-10 lg:max-w-[900px] xl:max-w-[1200px] mx-auto w-full flex-grow flex items-center">
+        <div className="w-full overflow-x-auto lg:overflow-x-visible h-full flex items-center scrollbar-hidden">
+          {/* padding container match với paddingX */}
+          <div className="relative w-full min-w-[1000px] md:min-w-0 h-[80%] px-4 md:px-6 lg:px-[80px]">
+            <svg
+              ref={svgRef}
+              viewBox="0 0 1000 300"
+              className="absolute inset-0 w-full h-full z-0 pointer-events-none"
+            >
               <polyline
                 ref={lineRef}
                 points={svgPoints}
@@ -152,9 +178,15 @@ export default function IndependenceIssues() {
                 strokeDasharray="1,12"
                 strokeLinecap="round"
               />
-              <circle ref={motionDotRef} r={8} fill="#d00000" stroke="white" strokeWidth="2" />
+              <circle
+                ref={motionDotRef}
+                r={8}
+                fill="#d00000"
+                stroke="white"
+                strokeWidth="2"
+              />
             </svg>
-            <p className="section-label absolute -top-10 left-4 md:-left-16 lg:-left-36 px-5 py-2 bg-white text-red-700 font-bold rounded-lg shadow-lg border border-gray-300 rotate-[-2deg]">
+            <p className="section-label absolute -top-16 md:-top-16 lg:-top-10 -left-2 md:-left-2 lg:-left-40 px-5 py-2 bg-white text-red-700 font-bold rounded-lg shadow-lg border border-gray-300 rotate-[-2deg]">
               Vấn đề Độc lập dân tộc
             </p>
             {pointsPx.map((p, i) => {
@@ -169,7 +201,13 @@ export default function IndependenceIssues() {
                     transform: `translate(-50%, ${translateY})`,
                   }}
                 >
-                  <IssueCard index={i} title={issues[i].title} desc={issues[i].desc} img={issues[i].img} href={issues[i].href} />
+                  <IssueCard
+                    index={i}
+                    title={issues[i].title}
+                    desc={issues[i].desc}
+                    img={issues[i].img}
+                    href={issues[i].href}
+                  />
                 </div>
               );
             })}

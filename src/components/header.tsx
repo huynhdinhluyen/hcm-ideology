@@ -79,7 +79,7 @@ export default function Header() {
           </Link>
           <Link href="/cach-mang-giai-phong-dan-toc">
             <span className="text-lg font-semibold hover:text-red-300 transition-colors duration-300 drop-shadow-sm">
-              Cách mạng giải phóng
+              Cách mạng giải phóng dân tộc
             </span>
           </Link>
         </nav>
@@ -108,9 +108,9 @@ export default function Header() {
                 Vấn đề độc lập dân tộc
               </span>
             </Link>
-            <Link href="/muc-2" onClick={() => setIsMenuOpen(false)}>
+            <Link href="/cach-mang-giai-phong-dan-toc" onClick={() => setIsMenuOpen(false)}>
               <span className="font-semibold block py-2 hover:bg-gray-100 rounded">
-                Cách mạng giải phóng
+                Cách mạng giải phóng dân tộc
               </span>
             </Link>
           </nav>

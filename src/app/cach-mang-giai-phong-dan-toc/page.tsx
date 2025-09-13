@@ -115,39 +115,33 @@ export default function CachMangGiaiPhongDanToc() {
     }
   };
 
-  // SỬA LẠI HÀM HANDLE METADATA
   const handleVideoMetadata = () => {
     if (videoRef.current) {
       const videoDuration = videoRef.current.duration;
-      console.log('Video duration:', videoDuration); // Debug log
       if (videoDuration && !isNaN(videoDuration) && videoDuration > 0 && videoDuration !== Infinity) {
         setDuration(videoDuration);
       }
     }
   };
 
-  // SỬA LẠI HÀM HANDLE LOADED DATA
   const handleLoadedData = () => {
     if (videoRef.current) {
       const videoDuration = videoRef.current.duration;
-      console.log('Video loaded data duration:', videoDuration); // Debug log
       if (videoDuration && !isNaN(videoDuration) && videoDuration > 0 && videoDuration !== Infinity) {
         setDuration(videoDuration);
       }
     }
   };
 
-  // SỬA LẠI HÀM TUA VIDEO
   const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (videoRef.current && duration > 0) {
       const percentage = parseFloat(e.target.value);
       const newTime = (percentage / 100) * duration;
       videoRef.current.currentTime = newTime;
-      setCurrentTime(newTime); // Cập nhật currentTime ngay lập tức
+      setCurrentTime(newTime);
     }
   };
 
-  // FORMAT TIME - GIỮ NGUYÊN
   const formatTime = (time: number) => {
     if (isNaN(time) || time < 0) return "0:00";
     
@@ -168,7 +162,7 @@ export default function CachMangGiaiPhongDanToc() {
         ease: "power3.out"
       });
 
-      // Steps animation - HIỆU ỨNG ĐƠN GIẢN
+      // Steps animation
       gsap.fromTo(".step-card", 
         {
           opacity: 0,
@@ -266,7 +260,7 @@ export default function CachMangGiaiPhongDanToc() {
             Tư tưởng Hồ Chí Minh về con đường giải phóng dân tộc Việt Nam
           </p>
           
-          {/* Hero Video - ĐÃ SỬA LẠI */}
+          {/* Hero Video */}
           <div className="relative max-w-5xl mx-auto mb-8 group">
             <video
               ref={videoRef}
@@ -279,16 +273,15 @@ export default function CachMangGiaiPhongDanToc() {
               onPause={() => setIsVideoPlaying(false)}
               onTimeUpdate={handleTimeUpdate}
               onLoadedMetadata={handleVideoMetadata}
-              onLoadedData={handleLoadedData} // THÊM EVENT HANDLER MỚI
+              onLoadedData={handleLoadedData}
               onDurationChange={handleVideoMetadata}
-              onCanPlay={handleVideoMetadata} // THÊM EVENT HANDLER MỚI
+              onCanPlay={handleVideoMetadata}
               onError={() => console.log("Video load error")}
             >
               <source src="/videos/tuyen-ngon-doc-lap.mp4" type="video/mp4" />
               Trình duyệt của bạn không hỗ trợ thẻ video.
             </video>
             
-            {/* Fallback image khi video không có */}
             <div className="absolute inset-0 bg-gray-800/80 rounded-lg flex items-center justify-center
                           opacity-0 transition-opacity duration-300"
                  style={{
@@ -301,7 +294,7 @@ export default function CachMangGiaiPhongDanToc() {
               </div>
             </div>
             
-            {/* Nút Play/Pause ở giữa */}
+            {/* Nút Play/Pause */}
             <div className="absolute inset-0 flex items-center justify-center 
                           bg-black/20 opacity-0 group-hover:opacity-100 
                           transition-opacity duration-300 rounded-lg">
@@ -316,7 +309,7 @@ export default function CachMangGiaiPhongDanToc() {
               </button>
             </div>
             
-            {/* CONTROLS CONTAINER - ĐÃ SỬA LẠI */}
+            {/* CONTROLS CONTAINER */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent
                           opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-lg p-4">
               
@@ -349,7 +342,7 @@ export default function CachMangGiaiPhongDanToc() {
 
               {/* BOTTOM CONTROLS */}
               <div className="flex items-center justify-between">
-                {/* TIME DISPLAY - SỬA LẠI */}
+                {/* TIME DISPLAY */}
                 <div className="text-white text-sm font-medium bg-black/30 px-2 py-1 rounded">
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </div>

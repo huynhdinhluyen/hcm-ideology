@@ -67,14 +67,19 @@ export default function Header() {
     >
       <div className="container mx-auto flex justify-end items-center">
         <nav className="hidden md:flex space-x-8">
+          <Link href="/ve-du-an">
+            <span className="text-lg font-semibold hover:text-red-300 transition-colors duration-300 drop-shadow-sm">
+              Về dự án
+            </span>
+          </Link>
           <Link href="/doc-lap-dan-toc">
             <span className="text-lg font-semibold hover:text-red-300 transition-colors duration-300 drop-shadow-sm">
               Vấn đề độc lập dân tộc
             </span>
           </Link>
-          <Link href="/muc-2">
+          <Link href="/cach-mang-giai-phong-dan-toc">
             <span className="text-lg font-semibold hover:text-red-300 transition-colors duration-300 drop-shadow-sm">
-              Cách mạng giải phóng
+              Cách mạng giải phóng dân tộc
             </span>
           </Link>
         </nav>
@@ -93,14 +98,19 @@ export default function Header() {
         <div className="md:hidden mt-4 bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800 shadow-lg">
           {" "}
           <nav className="flex flex-col space-y-4">
+            <Link href="/ve-du-an" onClick={() => setIsMenuOpen(false)}>
+              <span className="font-semibold block py-2 hover:bg-gray-100 rounded">
+                Về dự án
+              </span>
+            </Link>
             <Link href="/doc-lap-dan-toc" onClick={() => setIsMenuOpen(false)}>
               <span className="font-semibold block py-2 hover:bg-gray-100 rounded">
                 Vấn đề độc lập dân tộc
               </span>
             </Link>
-            <Link href="/muc-2" onClick={() => setIsMenuOpen(false)}>
+            <Link href="/cach-mang-giai-phong-dan-toc" onClick={() => setIsMenuOpen(false)}>
               <span className="font-semibold block py-2 hover:bg-gray-100 rounded">
-                Cách mạng giải phóng
+                Cách mạng giải phóng dân tộc
               </span>
             </Link>
           </nav>

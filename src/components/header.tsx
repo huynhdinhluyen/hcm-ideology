@@ -77,7 +77,7 @@ export default function Header() {
               Vấn đề độc lập dân tộc
             </span>
           </Link>
-          <Link href="/muc-2">
+          <Link href="/cach-mang-giai-phong-dan-toc">
             <span className="text-lg font-semibold hover:text-red-300 transition-colors duration-300 drop-shadow-sm">
               Cách mạng giải phóng
             </span>

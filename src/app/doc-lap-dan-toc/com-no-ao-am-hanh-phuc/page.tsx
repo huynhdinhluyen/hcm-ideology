@@ -130,7 +130,7 @@ export default function ComNoAoAm() {
         <ArrowLeft className="w-7 h-7" />
       </button>
 
-      <div className="relative z-10 max-w-[1600px] w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="relative z-10 max-w-[1600px] w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center overflow-y-auto scrollbar-hidden">
         <div className="image-container flex justify-center">
           <div
             className="relative p-4 bg-white rounded-md shadow-2xl transform -rotate-3 

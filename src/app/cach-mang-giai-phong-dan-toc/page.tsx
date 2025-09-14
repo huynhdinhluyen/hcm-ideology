@@ -1,11 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowLeft, Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, Play, Pause, Volume2, VolumeX, ChevronUp } from "lucide-react";
+import Header from "@/components/header"; // THÊM IMPORT
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -95,7 +96,35 @@ export default function CachMangGiaiPhongDanToc() {
   const [isMuted, setIsMuted] = useState(false); 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollToTop(window.scrollY > 500);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   const scrollToSection = (index: number) => {
     setCurrentStep(index);
@@ -228,19 +257,37 @@ export default function CachMangGiaiPhongDanToc() {
 
   return (
     <div ref={sectionRef} className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* THÊM HEADER COMPONENT */}
+      <Header />
+      
       {/* Back Button */}
       <button
         onClick={() => router.push("/")}
-        className="fixed left-6 top-6 z-50 flex items-center gap-2 
+        className="fixed left-2 top-20 sm:left-6 sm:top-24 z-40 flex items-center gap-1 sm:gap-2 
                    bg-white/90 hover:bg-white text-red-800 font-semibold 
-                   px-4 py-2 rounded-lg shadow-lg backdrop-blur-sm
-                   transition-all duration-300 hover:scale-105 cursor-pointer"
+                   px-2 py-2 sm:px-4 sm:py-2 rounded-lg shadow-lg backdrop-blur-sm
+                   transition-all duration-300 hover:scale-105 cursor-pointer
+                   text-xs sm:text-sm"
       >
-        <ArrowLeft className="w-5 h-5" />
-        <span className="hidden md:inline">Trang chủ</span>
+        <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+        <span className="hidden sm:inline">Trang chủ</span>
       </button>
 
-      {/* Header Section */}
+      {/* SCROLL TO TOP BUTTON */}
+      {showScrollToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed right-2 bottom-2 sm:right-6 sm:bottom-6 z-50 
+                     bg-red-600 hover:bg-red-700 text-white p-2 sm:p-3 rounded-full
+                     shadow-lg transition-all duration-300 hover:scale-110
+                     animate-bounce"
+          aria-label="Scroll to top"
+        >
+          <ChevronUp className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
+      )}
+
+      {/* Header Section - ĐIỀU CHỈNH ĐỂ TRÁNH HEADER */}
       <section className="header-section relative h-screen flex items-center justify-center overflow-hidden">
         <Image
           src="/images/giai-phong-dan-toc/cach-mang-giai-phong-dan-toc.jpg"
@@ -250,18 +297,17 @@ export default function CachMangGiaiPhongDanToc() {
           priority
         />
         <div className="absolute inset-0 bg-black/40" />
-        
-        <div className="relative z-10 text-center px-6 max-w-4xl">
-          <h1 className="text-4xl md:text-7xl font-extrabold text-white mb-6 
+        <div className="relative z-10 text-center px-3 sm:px-6 max-w-6xl w-full mt-20 sm:mt-24">
+          <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6 
                          drop-shadow-2xl leading-tight">
             Cách mạng giải phóng dân tộc
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+          <p className="text-sm sm:text-xl md:text-2xl text-white/90 mb-6 sm:mb-8 leading-relaxed px-2">
             Tư tưởng Hồ Chí Minh về con đường giải phóng dân tộc Việt Nam
           </p>
           
           {/* Hero Video */}
-          <div className="relative max-w-5xl mx-auto mb-8 group">
+          <div className="relative max-w-xs sm:max-w-2xl lg:max-w-5xl mx-auto mb-6 sm:mb-8 group">
             <video
               ref={videoRef}
               preload="metadata"
@@ -282,39 +328,63 @@ export default function CachMangGiaiPhongDanToc() {
               Trình duyệt của bạn không hỗ trợ thẻ video.
             </video>
             
+            {/* FALLBACK IMAGE */}
             <div className="absolute inset-0 bg-gray-800/80 rounded-lg flex items-center justify-center
                           opacity-0 transition-opacity duration-300"
                  style={{
                    opacity: videoRef.current?.error ? 1 : 0
                  }}>
-              <div className="text-center text-white p-6">
-                <Play className="w-20 h-20 mx-auto mb-4 opacity-70" />
-                <p className="text-lg opacity-90 mb-2">Video</p>
-                <p className="text-sm opacity-70">Cách mạng giải phóng dân tộc</p>
+              <div className="text-center text-white p-4 sm:p-6">
+                <Play className="w-12 h-12 sm:w-20 sm:h-20 mx-auto mb-2 sm:mb-4 opacity-70" />
+                <p className="text-base sm:text-lg opacity-90 mb-1 sm:mb-2">Video</p>
+                <p className="text-xs sm:text-sm opacity-70">Cách mạng giải phóng dân tộc</p>
               </div>
             </div>
             
-            {/* Nút Play/Pause */}
-            <div className="absolute inset-0 flex items-center justify-center 
-                          bg-black/20 opacity-0 group-hover:opacity-100 
-                          transition-opacity duration-300 rounded-lg">
-              <button
-                onClick={toggleVideo}
-                className="bg-red-600/90 hover:bg-red-600 text-white p-5 rounded-full
-                           transition-all duration-300 hover:scale-110 backdrop-blur-sm
-                           shadow-lg"
-                aria-label={isVideoPlaying ? "Pause video" : "Play video"}
-              >
-                {isVideoPlaying ? <Pause size={36} /> : <Play size={36} />}
-              </button>
+            {/* NÚT PLAY */}
+            {!isVideoPlaying && (
+              <div className="absolute inset-0 flex items-center justify-center rounded-lg">
+                <button
+                  onClick={toggleVideo}
+                  className="bg-red-600/90 hover:bg-red-600 text-white p-4 sm:p-6 rounded-full
+                             transition-all duration-300 hover:scale-110 backdrop-blur-sm
+                             shadow-2xl border-2 sm:border-4 border-white/30 animate-pulse"
+                  aria-label="Play video"
+                >
+                  <Play className="w-8 h-8 sm:w-12 sm:h-12 ml-1" />
+                </button>
+              </div>
+            )}
+
+            {/* VIDEO LABEL */}
+            <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black/70 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium">
+              📹 Video
             </div>
             
+            {/* NÚT PLAY/PAUSE */}
+            {isVideoPlaying && !isMobile && (
+              <div className="absolute inset-0 flex items-center justify-center 
+                            bg-black/20 opacity-0 group-hover:opacity-100 
+                            transition-opacity duration-300 rounded-lg">
+                <button
+                  onClick={toggleVideo}
+                  className="bg-red-600/90 hover:bg-red-600 text-white p-5 rounded-full
+                             transition-all duration-300 hover:scale-110 backdrop-blur-sm
+                             shadow-lg"
+                  aria-label="Pause video"
+                >
+                  <Pause size={36} />
+                </button>
+              </div>
+            )}
+            
             {/* CONTROLS CONTAINER */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent
-                          opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-lg p-4">
+            <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent
+                          ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} 
+                          transition-opacity duration-300 rounded-b-lg p-2 sm:p-4`}>
               
               {/* THANH PROGRESS BAR */}
-              <div className="mb-3">
+              <div className="mb-2 sm:mb-3">
                 <input
                   type="range"
                   min="0"
@@ -322,16 +392,16 @@ export default function CachMangGiaiPhongDanToc() {
                   step="0.1"
                   value={duration > 0 ? (currentTime / duration) * 100 : 0}
                   onChange={handleProgressChange}
-                  className="w-full h-2 bg-white/30 rounded-lg appearance-none cursor-pointer
+                  className="w-full h-1 sm:h-2 bg-white/30 rounded-lg appearance-none cursor-pointer
                            [&::-webkit-slider-thumb]:appearance-none
-                           [&::-webkit-slider-thumb]:w-4 
-                           [&::-webkit-slider-thumb]:h-4 
+                           [&::-webkit-slider-thumb]:w-3 sm:[&::-webkit-slider-thumb]:w-4 
+                           [&::-webkit-slider-thumb]:h-3 sm:[&::-webkit-slider-thumb]:h-4 
                            [&::-webkit-slider-thumb]:rounded-full 
                            [&::-webkit-slider-thumb]:bg-red-600
                            [&::-webkit-slider-thumb]:cursor-pointer
                            [&::-webkit-slider-thumb]:shadow-lg
-                           [&::-moz-range-thumb]:w-4 
-                           [&::-moz-range-thumb]:h-4 
+                           [&::-moz-range-thumb]:w-3 sm:[&::-moz-range-thumb]:w-4 
+                           [&::-moz-range-thumb]:h-3 sm:[&::-moz-range-thumb]:h-4 
                            [&::-moz-range-thumb]:rounded-full 
                            [&::-moz-range-thumb]:bg-red-600
                            [&::-moz-range-thumb]:cursor-pointer
@@ -343,63 +413,77 @@ export default function CachMangGiaiPhongDanToc() {
               {/* BOTTOM CONTROLS */}
               <div className="flex items-center justify-between">
                 {/* TIME DISPLAY */}
-                <div className="text-white text-sm font-medium bg-black/30 px-2 py-1 rounded">
+                <div className="text-white text-xs sm:text-sm font-medium bg-black/30 px-1 py-0.5 sm:px-2 sm:py-1 rounded">
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </div>
 
                 {/* CONTROL BUTTONS */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  {/* Play/Pause Button */}
+                  {isMobile && (
+                    <button
+                      onClick={toggleVideo}
+                      className="bg-red-600/80 hover:bg-red-600 text-white p-1.5 sm:p-2 rounded-full
+                               transition-all duration-300"
+                      aria-label={isVideoPlaying ? "Pause video" : "Play video"}
+                    >
+                      {isVideoPlaying ? <Pause size={16} /> : <Play size={16} />}
+                    </button>
+                  )}
+
                   {/* Volume Button */}
                   <button
                     onClick={toggleMute}
-                    className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full
+                    className="bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 rounded-full
                              transition-all duration-300"
                     aria-label={isMuted ? "Unmute video" : "Mute video"}
                   >
-                    {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                    {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
                   </button>
                 </div>
               </div>
             </div>
             
             {/* Video title overlay */}
-            <div className="absolute top-4 left-4 right-4">
-              <div className="bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-lg
-                            opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h3 className="font-semibold text-lg">Tuyên ngôn độc lập</h3>
-                <p className="text-sm opacity-90">2 tháng 9 năm 1945</p>
+            {!isMobile && (
+              <div className="absolute top-4 left-4">
+                <div className="bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-lg
+                              opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <h3 className="font-semibold text-lg">Tuyên ngôn độc lập</h3>
+                  <p className="text-sm opacity-90">2 tháng 9 năm 1945</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* Steps Overview */}
-      <section className="steps-container py-20 px-6">
+      <section className="steps-container py-12 sm:py-20 px-3 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 sm:mb-16 px-2">
             Năm luận điểm cơ bản
           </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
             {revolutionSteps.map((step, index) => (
               <div
                 key={step.id}
                 className={`step-card cursor-pointer group relative overflow-hidden
-                           bg-gradient-to-br ${step.color} text-white p-6 rounded-xl
+                           bg-gradient-to-br ${step.color} text-white p-4 sm:p-6 rounded-xl
                            shadow-lg hover:shadow-xl transition-all duration-300
-                           hover:-translate-y-1 min-h-[200px] flex flex-col
-                           ${currentStep === index ? 'ring-4 ring-white/50 scale-105' : ''}`}
+                           hover:-translate-y-1 min-h-[160px] sm:min-h-[200px] flex flex-col
+                           ${currentStep === index ? 'ring-2 sm:ring-4 ring-white/50 scale-105' : ''}`}
                 onClick={() => scrollToSection(index)}
               >
                 <div className="relative z-10 flex-1 flex flex-col justify-center">
-                  <div className="text-3xl font-bold mb-2 transition-transform duration-200">
+                  <div className="text-2xl sm:text-3xl font-bold mb-2 transition-transform duration-200">
                     {step.id}
                   </div>
-                  <h3 className="text-lg font-semibold mb-2 leading-tight">
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 leading-tight">
                     {step.title}
                   </h3>
-                  <p className="text-sm opacity-90">{step.subtitle}</p>
+                  <p className="text-xs sm:text-sm opacity-90">{step.subtitle}</p>
                 </div>
                 
                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 
@@ -414,52 +498,52 @@ export default function CachMangGiaiPhongDanToc() {
       {revolutionSteps.map((step, index) => (
         <section
           key={step.id}
-          className={`content-section-${index} py-20 px-6 ${
+          className={`content-section-${index} py-12 sm:py-20 px-3 sm:px-6 ${
             index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
           }`}
         >
           <div className="max-w-7xl mx-auto">
-            <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
+            <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center ${
               index % 2 === 0 ? '' : 'lg:grid-flow-col-dense'
             }`}>
               {/* Content */}
               <div className={index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}>
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className={`w-12 h-12 bg-gradient-to-br ${step.color} 
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="flex items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br ${step.color} 
                                    text-white rounded-full flex items-center justify-center
-                                   text-xl font-bold`}>
+                                   text-lg sm:text-xl font-bold flex-shrink-0 mt-1 sm:mt-0`}>
                       {step.id}
                     </div>
                     <div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-gray-800 leading-tight">
+                      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 leading-tight mb-1">
                         {step.title}
                       </h2>
-                      <p className="text-gray-600">{step.subtitle}</p>
+                      <p className="text-sm sm:text-base text-gray-600">{step.subtitle}</p>
                     </div>
                   </div>
 
-                  <blockquote className="relative border-l-4 border-red-600 pl-6 py-6 
+                  <blockquote className="relative border-l-4 border-red-600 pl-4 sm:pl-6 py-4 sm:py-6 
                                        bg-gradient-to-r from-red-50 to-orange-50 
                                        rounded-r-lg shadow-md">
-                    <div className="absolute top-2 left-2 text-red-300 text-4xl leading-none">"</div>
-                    <p className="text-lg md:text-xl font-semibold text-gray-900 italic 
-                                 leading-relaxed pl-6">
+                    <div className="absolute top-1 left-1 sm:top-2 sm:left-2 text-red-300 text-2xl sm:text-4xl leading-none">"</div>
+                    <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-900 italic 
+                                 leading-relaxed pl-4 sm:pl-6">
                       {step.quote}
                     </p>
-                    <div className="absolute bottom-2 right-4 text-red-300 text-4xl leading-none 
+                    <div className="absolute bottom-1 right-2 sm:bottom-2 sm:right-4 text-red-300 text-2xl sm:text-4xl leading-none 
                                    transform rotate-180">"</div>
-                    <cite className="block text-right mt-4 text-red-700 font-medium text-sm">
+                    <cite className="block text-right mt-3 sm:mt-4 text-red-700 font-medium text-xs sm:text-sm">
                       — Chủ tịch Hồ Chí Minh
                     </cite>
                   </blockquote>
 
-                  <ul className="space-y-4">
+                  <ul className="space-y-3 sm:space-y-4">
                     {step.content.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <div className={`w-2 h-2 bg-gradient-to-br ${step.color} 
+                      <li key={idx} className="flex items-start gap-2 sm:gap-3">
+                        <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gradient-to-br ${step.color} 
                                        rounded-full mt-2 flex-shrink-0`} />
-                        <span className="text-gray-700 leading-relaxed">{item}</span>
+                        <span className="text-sm sm:text-base text-gray-700 leading-relaxed">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -467,16 +551,16 @@ export default function CachMangGiaiPhongDanToc() {
               </div>
 
               {/* Media */}
-              <div className={index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}>
+              <div className={`${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'} mt-6 lg:mt-0`}>
                 <div className="relative group">
                   <div className="relative overflow-visible">
-                    <div className={`absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br ${step.color} 
+                    <div className={`absolute -top-4 -right-4 sm:-top-8 sm:-right-8 w-16 h-16 sm:w-32 sm:h-32 bg-gradient-to-br ${step.color} 
                                    rounded-full opacity-20 blur-xl`} />
-                    <div className={`absolute -bottom-8 -left-8 w-24 h-24 bg-gradient-to-br ${step.color} 
+                    <div className={`absolute -bottom-4 -left-4 sm:-bottom-8 sm:-left-8 w-12 h-12 sm:w-24 sm:h-24 bg-gradient-to-br ${step.color} 
                                    rounded-full opacity-30 blur-lg`} />
                     
-                    <div className="relative z-10 bg-white p-4 rounded-xl shadow-2xl 
-                                   transform rotate-2 group-hover:rotate-0 transition-all duration-500
+                    <div className="relative z-10 bg-white p-3 sm:p-4 rounded-xl shadow-2xl 
+                                   transform rotate-1 sm:rotate-2 group-hover:rotate-0 transition-all duration-500
                                    group-hover:scale-105">
                       <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg">
                         <Image
@@ -491,15 +575,15 @@ export default function CachMangGiaiPhongDanToc() {
                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100
                                        transition-opacity duration-300 flex items-center justify-center
                                        rounded-lg">
-                          <div className="text-center text-white p-4">
-                            <h4 className="font-bold text-lg mb-2">{step.title}</h4>
-                            <p className="text-sm">{step.altText}</p>
+                          <div className="text-center text-white p-3 sm:p-4">
+                            <h4 className="font-bold text-base sm:text-lg mb-2">{step.title}</h4>
+                            <p className="text-xs sm:text-sm">{step.altText}</p>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="mt-4 text-center">
-                        <p className="text-gray-600 text-sm italic">{step.altText}</p>
+                      <div className="mt-3 sm:mt-4 text-center">
+                        <p className="text-gray-600 text-xs sm:text-sm italic">{step.altText}</p>
                       </div>
                     </div>
                   </div>
@@ -511,29 +595,29 @@ export default function CachMangGiaiPhongDanToc() {
       ))}
 
       {/* Conclusion Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-red-800 to-red-600 text-white">
+      <section className="py-12 sm:py-20 px-3 sm:px-6 bg-gradient-to-br from-red-800 to-red-600 text-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8">
             Ý nghĩa lịch sử
           </h2>
-          <p className="text-xl leading-relaxed mb-8">
+          <p className="text-base sm:text-xl leading-relaxed mb-6 sm:mb-8 px-2">
             Tư tưởng Hồ Chí Minh về cách mạng giải phóng dân tộc không chỉ có ý nghĩa 
             đối với Việt Nam mà còn đóng góp quan trọng vào kho tàng lý luận cách mạng 
             của nhân loại.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="text-xl font-bold mb-4">Sáng tạo lý luận</h3>
-              <p>Bổ sung và phát triển chủ nghĩa Mác-Lênin phù hợp với điều kiện Việt Nam</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 mt-8 sm:mt-12">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Sáng tạo lý luận</h3>
+              <p className="text-sm sm:text-base">Bổ sung và phát triển chủ nghĩa Mác-Lênin phù hợp với điều kiện Việt Nam</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="text-xl font-bold mb-4">Thực tiễn thành công</h3>
-              <p>Dẫn dắt cách mạng Việt Nam từ thắng lợi này đến thắng lợi khác</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Thực tiễn thành công</h3>
+              <p className="text-sm sm:text-base">Dẫn dắt cách mạng Việt Nam từ thắng lợi này đến thắng lợi khác</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="text-xl font-bold mb-4">Giá trị toàn cầu</h3>
-              <p>Định hướng cho các dân tộc bị áp bức trên thế giới</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Giá trị toàn cầu</h3>
+              <p className="text-sm sm:text-base">Định hướng cho các dân tộc bị áp bức trên thế giới</p>
             </div>
           </div>
         </div>

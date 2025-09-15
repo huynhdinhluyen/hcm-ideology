@@ -160,7 +160,7 @@ export default function IndependenceIssues() {
         className="object-cover"
         priority
       />
-      <div className="relative z-10 lg:max-w-[900px] xl:max-w-[1200px] mx-auto w-full flex-grow flex items-center">
+      <div className="relative z-10 lg:max-w-[900px] xl:max-w-[1200px] mx-auto w-full flex-grow flex items-center pt-10">
         <div className="w-full overflow-x-auto lg:overflow-x-visible h-full flex items-center scrollbar-hidden">
           {/* padding container match với paddingX */}
           <div className="relative w-full min-w-[1000px] md:min-w-0 h-[80%] px-4 md:px-6 lg:px-[80px]">
@@ -186,9 +186,6 @@ export default function IndependenceIssues() {
                 strokeWidth="2"
               />
             </svg>
-            <p className="section-label absolute -top-16 md:-top-16 lg:-top-10 -left-2 md:-left-2 lg:-left-40 px-5 py-2 bg-white text-red-700 font-bold rounded-lg shadow-lg border border-gray-300 rotate-[-2deg]">
-              Vấn đề Độc lập dân tộc
-            </p>
             {pointsPx.map((p, i) => {
               const translateY = i % 2 === 0 ? "0px" : "-100%";
               return (

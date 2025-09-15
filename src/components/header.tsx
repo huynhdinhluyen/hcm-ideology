@@ -2,7 +2,9 @@
 
 import { useState, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
+import Image from "next/image";
 
 const MenuIcon = () => (
   <svg
@@ -41,6 +43,7 @@ const CloseIcon = () => (
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
+  const pathname = usePathname();
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -59,31 +62,62 @@ export default function Header() {
     return () => ctx.revert();
   }, []);
 
+  const linkClasses = (href: string) =>
+    `text-md font-semibold transition-colors duration-300 drop-shadow-sm hover:text-red-300 ${
+      pathname === href
+        ? "underline underline-offset-4 decoration-2 text-red-400"
+        : ""
+    }`;
+
+  const mobileLinkClasses = (href: string) =>
+    `font-semibold block py-2 rounded hover:bg-gray-100 ${
+      pathname === href
+        ? "underline underline-offset-4 decoration-2 text-red-600"
+        : ""
+    }`;
+
   return (
     <header
       ref={headerRef}
-      className="absolute top-0 left-0 w-full z-50 p-4 md:p-6 text-[#f9f0e4]
+      className="absolute top-0 left-0 w-full z-50 p-4 md:p-4 text-[#f9f0e4]
                  bg-white/5 opacity-10 backdrop-blur-xs"
     >
-      <div className="container mx-auto flex justify-end items-center">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/images/logo.jpg"
+            alt="Logo"
+            width={40}
+            height={40}
+            className="rounded"
+          />
+          <span className="font-bold text-white text-lg hidden md:block">
+            HCM202
+          </span>
+        </Link>
+
+        {/* Desktop nav */}
         <nav className="hidden md:flex space-x-8">
           <Link href="/ve-du-an">
-            <span className="text-lg font-semibold hover:text-red-300 transition-colors duration-300 drop-shadow-sm">
-              Về dự án
-            </span>
+            <span className={linkClasses("/ve-du-an")}>Về dự án</span>
           </Link>
           <Link href="/doc-lap-dan-toc">
-            <span className="text-lg font-semibold hover:text-red-300 transition-colors duration-300 drop-shadow-sm">
+            <span className={linkClasses("/doc-lap-dan-toc")}>
               Vấn đề độc lập dân tộc
             </span>
           </Link>
           <Link href="/cach-mang-giai-phong-dan-toc">
-            <span className="text-lg font-semibold hover:text-red-300 transition-colors duration-300 drop-shadow-sm">
+            <span className={linkClasses("/cach-mang-giai-phong-dan-toc")}>
               Cách mạng giải phóng dân tộc
             </span>
           </Link>
+          <Link href="/quiz">
+            <span className={linkClasses("/quiz")}>Ôn tập</span>
+          </Link>
         </nav>
 
+        {/* Mobile menu button */}
         <div className="md:hidden">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -94,24 +128,30 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Mobile nav */}
       {isMenuOpen && (
         <div className="md:hidden mt-4 bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800 shadow-lg">
-          {" "}
           <nav className="flex flex-col space-y-4">
             <Link href="/ve-du-an" onClick={() => setIsMenuOpen(false)}>
-              <span className="font-semibold block py-2 hover:bg-gray-100 rounded">
-                Về dự án
-              </span>
+              <span className={mobileLinkClasses("/ve-du-an")}>Về dự án</span>
             </Link>
             <Link href="/doc-lap-dan-toc" onClick={() => setIsMenuOpen(false)}>
-              <span className="font-semibold block py-2 hover:bg-gray-100 rounded">
+              <span className={mobileLinkClasses("/doc-lap-dan-toc")}>
                 Vấn đề độc lập dân tộc
               </span>
             </Link>
-            <Link href="/cach-mang-giai-phong-dan-toc" onClick={() => setIsMenuOpen(false)}>
-              <span className="font-semibold block py-2 hover:bg-gray-100 rounded">
+            <Link
+              href="/cach-mang-giai-phong-dan-toc"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span
+                className={mobileLinkClasses("/cach-mang-giai-phong-dan-toc")}
+              >
                 Cách mạng giải phóng dân tộc
               </span>
+            </Link>
+            <Link href="/quiz" onClick={() => setIsMenuOpen(false)}>
+              <span className={mobileLinkClasses("/quiz")}>Ôn tập</span>
             </Link>
           </nav>
         </div>

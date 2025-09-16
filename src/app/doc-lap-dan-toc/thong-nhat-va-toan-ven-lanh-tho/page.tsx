@@ -167,35 +167,35 @@ export default function ThongNhatToanVen() {
           </div>
           <ul className="space-y-6 text-base md:text-lg leading-relaxed text-gray-800">
             <li className="list-item">
-              Tư tưởng này được nhất quán thể hiện trong nhiều văn kiện và phát
-              biểu của Hồ Chí Minh.
-            </li>
-            <li className="list-item">
               Trong{" "}
               <span className="font-semibold text-red-800">
                 Thư gửi đồng bào Nam Bộ (1946)
               </span>
               , Người khẳng định:{" "}
-              <span className="italic">
+              <span className="italic text-red-900">
                 "Đồng bào Nam Bộ là dân nước Việt Nam. Sông có thể cạn, núi có
-                thể mòn song chân lý đó không bao giờ thay đổi".
+                thể mòn song chân lý đó không bao giờ thay đổi."
               </span>
             </li>
             <li className="list-item">
-              Tháng 2 năm 1958, Người nói:{" "}
-              <span className="italic">
+              Tháng 2 năm 1958, Người nhấn mạnh:{" "}
+              <span className="italic text-red-900">
                 "Dù khó khăn, gian khổ đến mấy, nhân dân ta nhất định sẽ hoàn
                 toàn thắng lợi. Đế quốc Mỹ nhất định phải cút khỏi nước ta. Tổ
                 quốc ta nhất định sẽ thống nhất. Đồng bào Nam Bắc nhất định sẽ
-                sum họp một nhà".
+                sum họp một nhà."
               </span>
             </li>
             <li className="list-item">
               Trong <span className="font-semibold text-red-800">Di chúc</span>,
               Người khẳng định:{" "}
-              <span className="italic">
-                "Nước Việt Nam là một, dân tộc Việt Nam là một".
+              <span className="italic text-red-900">
+                "Nước Việt Nam là một, dân tộc Việt Nam là một."
               </span>
+            </li>
+            <li className="list-item">
+              Đây là tư tưởng nhất quán, xuyên suốt của Hồ Chí Minh, khẳng định
+              độc lập dân tộc luôn gắn liền với thống nhất và toàn vẹn lãnh thổ.
             </li>
           </ul>
         </div>

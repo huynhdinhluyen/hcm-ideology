@@ -138,7 +138,7 @@ export default function QuyenThienLieng() {
             className="relative p-4 bg-white rounded-md shadow-2xl transform -rotate-3 
                        border-4 border-gray-300 hover:rotate-0 hover:scale-105 transition-all duration-500"
           >
-            <div className="relative w-80 h-80 md:w-96 md:h-96">
+            <div className="relative w-80 h-80 md:w-[500px] md:h-[550px]">
               <Image
                 src="/images/independence-1.jpg"
                 alt="Hồ Chí Minh"
@@ -175,12 +175,30 @@ export default function QuyenThienLieng() {
               nhân dân. Đây là giá trị tinh thần thiêng liêng, bất hủ.
             </li>
             <li className="list-item">
-              Hồ Chí Minh đã khẳng định những giá trị thiêng liêng, bất biến về
-              quyền dân tộc, viện dẫn từ bản{" "}
+              Hồ Chí Minh khẳng định những giá trị bất biến về quyền dân tộc,
+              viện dẫn từ
               <span className="font-semibold text-red-800">
-                Tuyên ngôn Độc lập của cách mạng Mỹ năm 1776
+                {" "}
+                Tuyên ngôn Độc lập Mỹ năm 1776{" "}
+              </span>
+              và{" "}
+              <span className="font-semibold text-red-800">
+                {" "}
+                Tuyên ngôn Nhân quyền và Dân quyền Pháp năm 1791
               </span>
               .
+            </li>
+            <li className="list-item italic text-red-900">
+              “Tất cả các dân tộc trên thế giới đều sinh ra bình đẳng, dân tộc
+              nào cũng có quyền sống, quyền sung sướng và quyền tự do.”
+            </li>
+            <li className="list-item">
+              Đây là tư tưởng xuyên suốt hành trình cứu nước của Người, từ bản
+              Yêu sách năm 1919 đến lời khẳng định bất hủ:
+              <span className="font-semibold text-red-800">
+                {" "}
+                “Không có gì quý hơn độc lập, tự do.”
+              </span>
             </li>
           </ul>
         </div>

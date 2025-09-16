@@ -168,29 +168,38 @@ export default function ComNoAoAm() {
           </div>
           <ul className="space-y-6 text-base md:text-lg leading-relaxed text-gray-800">
             <li className="list-item">
-              Độc lập dân tộc phải gắn với tự do của nhân dân.
-            </li>
-            <li className="list-item">
-              Độc lập phải thiết thực, tức là phải gắn với cơm no, áo ấm và hạnh
-              phúc của nhân dân.
-            </li>
-            <li className="list-item">
-              Hồ Chí Minh chỉ rõ độc lập dân tộc không phải là{" "}
+              Độc lập dân tộc không chỉ là tự do hình thức mà phải gắn với
               <span className="font-semibold text-red-800">
-                "độc lập tự do" giả hiệu
+                {" "}
+                quyền tự do thực sự của nhân dân
               </span>
               .
             </li>
             <li className="list-item">
-              Người mong muốn{" "}
-              <span className="italic">
-                "Làm cho nước Nam được hoàn toàn độc lập... dân chúng được tự
-                do... thủ tiêu hết các thứ quốc trái... thâu hết ruộng đất của
-                đế quốc chủ nghĩa làm của công chia cho dân cày nghèo. Bỏ sưu
-                thuế cho dân cày nghèo... thi hành luật ngày làm 8 giờ".
+              Độc lập phải đi đôi với đời sống thiết thực:
+              <span className="font-semibold">
+                {" "}
+                cơm no, áo ấm và hạnh phúc của nhân dân
               </span>
+              .
             </li>
-            <li className="list-item">Đây là tư tưởng xuyên suốt của Người.</li>
+            <li className="list-item">
+              Hồ Chí Minh phê phán mạnh mẽ thứ{" "}
+              <span className="font-semibold text-red-800">
+                “độc lập tự do” giả hiệu
+              </span>
+              .
+            </li>
+            <li className="list-item italic text-red-900">
+              “Làm cho nước Nam được hoàn toàn độc lập, dân chúng được tự do,
+              thủ tiêu hết các thứ quốc trái, thâu hết ruộng đất của đế quốc chủ
+              nghĩa làm của công chia cho dân cày nghèo; bỏ sưu thuế cho dân cày
+              nghèo; thi hành luật ngày làm 8 giờ.”
+            </li>
+            <li className="list-item">
+              Đây là tư tưởng xuyên suốt, kết hợp độc lập dân tộc với hạnh phúc,
+              quyền lợi thiết thực của nhân dân.
+            </li>
           </ul>
         </div>
       </div>

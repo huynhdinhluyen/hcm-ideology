@@ -49,7 +49,7 @@ export default function Hero() {
           ref={titleRef}
           className="text-3xl md:text-6xl font-extrabold text-red-800 drop-shadow-lg uppercase leading-relaxed"
         >
-          Tư tưởng Hồ Chí Minh về độc lập dân tộc
+          Tư tưởng Hồ Chí Minh về độc lập dân tộc và chủ nghĩa xã hội
         </h1>
       </div>
     </section>
